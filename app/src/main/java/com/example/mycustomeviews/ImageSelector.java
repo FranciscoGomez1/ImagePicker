@@ -1,0 +1,72 @@
+package com.example.mycustomeviews;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
+import androidx.activity.ComponentActivity;
+import androidx.fragment.app.Fragment;
+
+public class ImageSelector extends RelativeLayout {
+    private GalleryOpener galleryOpener;
+    public ImageSelector(Context context) {
+        super(context);
+    }
+
+    private ComponentActivity activity;
+
+    public ImageSelector(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.activity= (ComponentActivity) context;
+        galleryOpener = new GalleryOpener(activity);
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        layoutInflater.inflate(R.layout.image_selector, this);
+
+
+        init();
+        if (attrs!=null) {
+            TypedArray a=getContext()
+                    .obtainStyledAttributes(attrs,
+                            R.styleable.ImageSelector,
+                            0, 0);
+
+            setColor(a.getInt(R.styleable.ImageSelector_buttonColor,
+                    0xFFA4C639));
+            a.recycle();
+        }
+
+    }
+
+    public ImageSelector(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+
+    }
+
+    private void init(){
+        ((Button) findViewById(R.id.image_selector_btm)).setOnClickListener(view -> openGallery());
+    }
+
+    private void setColor(int color){
+       ((Button) findViewById(R.id.image_selector_btm)).setBackgroundColor(color);
+
+    }
+
+    private void openGallery(){
+
+        galleryOpener.launchGallery();
+        galleryOpener.galleryOpenerListener(new GalleryOpener.ImageHasbeenSelected() {
+            @Override
+            public void imageUpdate() {
+                ((ImageView) findViewById(R.id.image)).setImageURI(galleryOpener.galleryUri);
+            }
+        });
+
+    }
+
+
+}
