@@ -3,6 +3,7 @@ package com.example.mycustomeviews;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.Button;
@@ -59,14 +60,12 @@ public class ImageSelector extends RelativeLayout {
     private void openGallery(){
 
         galleryOpener.launchGallery();
-        galleryOpener.galleryOpenerListener(new GalleryOpener.ImageHasbeenSelected() {
-            @Override
-            public void imageUpdate() {
-                ((ImageView) findViewById(R.id.image)).setImageURI(galleryOpener.galleryUri);
-            }
-        });
+        galleryOpener.galleryOpenerListener(() -> ((ImageView) findViewById(R.id.image)).setImageURI(GalleryOpener.galleryUri));
 
     }
 
+    public  void setBackground(Integer drawable){
+        ((ImageView) findViewById(R.id.image)).setImageResource(drawable);
+    }
 
 }

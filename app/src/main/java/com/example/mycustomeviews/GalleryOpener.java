@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class GalleryOpener extends AppCompatActivity{
 
     //need the uri
-    public static Uri galleryUri;
+    public static Uri galleryUri = null;
     private ComponentActivity activity;
     private ActivityResultLauncher<String> mGetContent;
     private ImageHasbeenSelected imageHasbeenSelected;
@@ -23,16 +23,16 @@ public class GalleryOpener extends AppCompatActivity{
     public GalleryOpener(ComponentActivity activity) {
         this.activity = activity;
         this.mGetContent = activity.registerForActivityResult(new ActivityResultContracts.GetContent(),
-                new ActivityResultCallback<Uri>() {
-                    @Override
-                    public void onActivityResult(Uri uri) {
-                        // Handle the returned Uri
-                        Log.d("URI", uri.toString());
-                        galleryUri = uri;
-                        //Set Listener
-                        imageHasbeenSelected.imageUpdate();
+                uri -> {
+                    // Handle the returned Uri
 
+                    //This is used in case the user hits the back button without selecting an image
+                    if( uri != null) {
+                        galleryUri = uri;
+                        //Call Listener
+                        imageHasbeenSelected.imageUpdate();
                     }
+
                 });
     }
     public void launchGallery(){
@@ -45,7 +45,7 @@ public class GalleryOpener extends AppCompatActivity{
     }
 
     public interface ImageHasbeenSelected{
-        public void imageUpdate();
+        void imageUpdate();
     }
 
 }
