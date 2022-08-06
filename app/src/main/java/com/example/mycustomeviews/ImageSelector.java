@@ -3,6 +3,7 @@ package com.example.mycustomeviews;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -50,6 +51,9 @@ public class ImageSelector extends RelativeLayout {
 
     private void init(){
         ((Button) findViewById(R.id.image_selector_btm)).setOnClickListener(view -> openGallery());
+        ((ImageView) findViewById(R.id.image)).setOnClickListener(view -> takePhoto());
+        galleryOpener.galleryOpenerListener(() -> ((ImageView) findViewById(R.id.image)).setImageURI(GalleryOpener.galleryUri));
+
     }
 
     private void setColor(int color){
@@ -57,10 +61,13 @@ public class ImageSelector extends RelativeLayout {
 
     }
 
+    private void takePhoto(){
+        galleryOpener.openPhotoApp();
+    }
+
     private void openGallery(){
 
         galleryOpener.launchGallery();
-        galleryOpener.galleryOpenerListener(() -> ((ImageView) findViewById(R.id.image)).setImageURI(GalleryOpener.galleryUri));
 
     }
 
