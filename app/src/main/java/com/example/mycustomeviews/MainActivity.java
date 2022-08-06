@@ -11,6 +11,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ((ImageSelector) findViewById(R.id.image_selector)).setBackground(R.drawable.placeholder);
+       // ((ImageSelector) findViewById(R.id.image_selector)).setBackground(R.drawable.placeholder);
     }
 }
