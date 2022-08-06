@@ -65,14 +65,17 @@ public class GalleryOpener extends AppCompatActivity{
                 });
     }
     public void launchGallery(){
+        Log.e("LAUNCHGALLERY", "YES");
         requestReadingPermissionsAndLaunchGallery();
     }
 
     private void requestReadingPermissionsAndLaunchGallery(){
         if (hasPermissions(galleryPermissions)) {
             mGetContent.launch("image/*");
+            Log.e("PERMISSIONS", "GRANTED");
 
         } else {
+            Log.e("PERMISSIONS", "NOT_GRANTED");
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 activity.requestPermissions(galleryPermissions, ALL_GALLERY_PERMISSIONS);
             }
@@ -103,6 +106,7 @@ public class GalleryOpener extends AppCompatActivity{
                     }
                 }
             }
+            return true;
         }
         return false;
     }
