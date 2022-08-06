@@ -2,44 +2,45 @@ package com.example.mycustomeviews;
 
 import android.Manifest;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
 
 
 import androidx.activity.ComponentActivity;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 public class GalleryOpener extends AppCompatActivity{
     //need the uri
     public static Uri galleryUri = null;
     private Uri cam_uri;
 
-    private static ComponentActivity activity;
+    private ComponentActivity activity;
     private ActivityResultLauncher<String> mGetContent;
 
     private ActivityResultLauncher<Intent> startCamera;
 
     private ImageHasbeenSelected imageHasbeenSelected;
 
-    private int ALL_PERMISSIONS = 101;
-    private final String[] permissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private final int ALL_CAMERA_PERMISSIONS = 101;
+    private final int ALL_GALLERY_PERMISSIONS = 202;
+    private final String[] camaraPermissions;
+    private final String[] galleryPermissions;
 
 
 
     public GalleryOpener(ComponentActivity activity) {
         this.activity = activity;
+
+        camaraPermissions = new String[]{Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE};
+        galleryPermissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+
         this.mGetContent = activity.registerForActivityResult(new ActivityResultContracts.GetContent(),
                 uri -> {
                     // Handle the returned Uri
@@ -64,9 +65,18 @@ public class GalleryOpener extends AppCompatActivity{
                 });
     }
     public void launchGallery(){
-        Log.d("URI", "ButtonPress");
-        mGetContent.launch("image/*");
+        requestReadingPermissionsAndLaunchGallery();
+    }
 
+    private void requestReadingPermissionsAndLaunchGallery(){
+        if (hasPermissions(galleryPermissions)) {
+            mGetContent.launch("image/*");
+
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                activity.requestPermissions(galleryPermissions, ALL_GALLERY_PERMISSIONS);
+            }
+        }
     }
 
     public void openPhotoApp(){
@@ -74,17 +84,17 @@ public class GalleryOpener extends AppCompatActivity{
     }
 
     public void requestCameraApp(){
-        if (hasPermissions(permissions)) {
+        if (hasPermissions(camaraPermissions)) {
             pickCamera();
 
         } else {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                activity.requestPermissions(permissions, ALL_PERMISSIONS);
+                activity.requestPermissions(camaraPermissions, ALL_CAMERA_PERMISSIONS);
             }
         }
     }
 
-    public static boolean hasPermissions(String[] permissions) {
+    private boolean hasPermissions(String[] permissions) {
         if (permissions != null) {
             for (String permission : permissions) {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -94,7 +104,7 @@ public class GalleryOpener extends AppCompatActivity{
                 }
             }
         }
-        return true;
+        return false;
     }
 
 
