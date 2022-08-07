@@ -12,7 +12,9 @@ import android.util.Log;
 import androidx.activity.ComponentActivity;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 public class GalleryOpener extends AppCompatActivity{
     //need the uri
@@ -23,6 +25,7 @@ public class GalleryOpener extends AppCompatActivity{
     private ActivityResultLauncher<String> mGetContent;
 
     private ActivityResultLauncher<Intent> startCamera;
+    private ActivityResultLauncher<String> requestPermissionLauncher;
 
     private ImageHasbeenSelected imageHasbeenSelected;
 
@@ -63,6 +66,24 @@ public class GalleryOpener extends AppCompatActivity{
 
                     }
                 });
+
+        this.requestPermissionLauncher =
+                activity.registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                    if (isGranted) {
+                        // Permission is granted. Continue the action or workflow in your
+                        // app.
+                        mGetContent.launch("image/*");
+
+                    } else {
+                        // Explain to the user that the feature is unavailable because the
+                        // features requires a permission that the user has denied. At the
+                        // same time, respect the user's decision. Don't link to system
+                        // settings in an effort to convince the user to change their
+                        // decision.
+                    }
+                });
+
+
     }
     public void launchGallery(){
         Log.e("LAUNCHGALLERY", "YES");
@@ -75,11 +96,45 @@ public class GalleryOpener extends AppCompatActivity{
             Log.e("PERMISSIONS", "GRANTED");
 
         } else {
-            Log.e("PERMISSIONS", "NOT_GRANTED");
+            /*Log.e("PERMISSIONS", "NOT_GRANTED");
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                activity.requestPermissions(galleryPermissions, ALL_GALLERY_PERMISSIONS);
-            }
+                ActivityCompat.requestPermissions(activity, galleryPermissions, ALL_GALLERY_PERMISSIONS);
+            }*/
+            requestPermissionLauncher.launch(
+                    Manifest.permission.CAMERA);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case ALL_GALLERY_PERMISSIONS:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mGetContent.launch("image/*");
+
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                } else {
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                }
+                return;
+        }
+        // Other 'case' lines to check for other
+        // permissions this app might request.
+    }
+
+
+    public void requestCameraPermission(){
+
     }
 
     public void openPhotoApp(){
@@ -110,6 +165,8 @@ public class GalleryOpener extends AppCompatActivity{
         }
         return false;
     }
+
+
 
 
     public void pickCamera() {
