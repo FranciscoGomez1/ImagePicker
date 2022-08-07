@@ -50,14 +50,14 @@ public class ImageSelector extends RelativeLayout {
     }
 
     private void init(){
-        ((Button) findViewById(R.id.image_selector_btm)).setOnClickListener(view -> openGallery());
-        ((ImageView) findViewById(R.id.image)).setOnClickListener(view -> takePhoto());
+        findViewById(R.id.image_selector_btm).setOnClickListener(view -> openGallery());
+        findViewById(R.id.image).setOnClickListener(view -> takePhoto());
         galleryOpener.galleryOpenerListener(() -> ((ImageView) findViewById(R.id.image)).setImageURI(GalleryOpener.galleryUri));
 
     }
 
     private void setColor(int color){
-       ((Button) findViewById(R.id.image_selector_btm)).setBackgroundColor(color);
+       findViewById(R.id.image_selector_btm).setBackgroundColor(color);
 
     }
 
@@ -71,6 +71,11 @@ public class ImageSelector extends RelativeLayout {
 
     }
 
+    //Return the imageView from the ImagesSelector groupViews
+    //With this the Image of ImageView can programmatically
+    public ImageView getSelectorImage(){
+        return findViewById(R.id.image);
+    }
     public  void setBackground(Integer drawable){
         ((ImageView) findViewById(R.id.image)).setImageResource(drawable);
     }
