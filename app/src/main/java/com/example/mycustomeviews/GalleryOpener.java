@@ -14,7 +14,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 public class GalleryOpener extends AppCompatActivity{
     //need the uri
@@ -23,18 +22,15 @@ public class GalleryOpener extends AppCompatActivity{
 
     private ComponentActivity activity;
     private ActivityResultLauncher<String> mGetContent;
-
     private ActivityResultLauncher<Intent> startCamera;
-    private ActivityResultLauncher<String> requestPermissionLauncher;
-
+    private ActivityResultLauncher<String[]> requestPermissionCameraLauncher;
+    private ActivityResultLauncher<String[]> requestPermissionGalleryLauncher;
     private ImageHasbeenSelected imageHasbeenSelected;
 
     private final int ALL_CAMERA_PERMISSIONS = 101;
     private final int ALL_GALLERY_PERMISSIONS = 202;
     private final String[] camaraPermissions;
     private final String[] galleryPermissions;
-
-
 
     public GalleryOpener(ComponentActivity activity) {
         this.activity = activity;
@@ -67,47 +63,31 @@ public class GalleryOpener extends AppCompatActivity{
                     }
                 });
 
-        this.requestPermissionLauncher =
-                activity.registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                    if (isGranted) {
-                        // Permission is granted. Continue the action or workflow in your
-                        // app.
-                        mGetContent.launch("image/*");
-
-                    } else {
-                        // Explain to the user that the feature is unavailable because the
-                        // features requires a permission that the user has denied. At the
-                        // same time, respect the user's decision. Don't link to system
-                        // settings in an effort to convince the user to change their
-                        // decision.
+        this.requestPermissionCameraLauncher =  activity.registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
+                isGranted ->{
+                    Log.d("PERMISSIONS", "Launcher result: " + isGranted.toString());
+                    if (isGranted.containsValue(false)) {
+                        Log.d("PERMISSIONS", "At least one of the permissions was not granted, launching again...");
+                    }else{
+                        pickCamera();
                     }
                 });
 
+        this.requestPermissionGalleryLauncher =  activity.registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
+                isGranted ->{
+                    Log.d("PERMISSIONS", "Launcher result: " + isGranted.toString());
+                    if (isGranted.containsValue(false)) {
+                        Log.d("PERMISSIONS", "At least one of the permissions was not granted, launching again...");
+                    }else{
+                        openGalleryApp();
+                    }
+                });
 
-    }
-    public void launchGallery(){
-        Log.e("LAUNCHGALLERY", "YES");
-        requestReadingPermissionsAndLaunchGallery();
-    }
-
-    private void requestReadingPermissionsAndLaunchGallery(){
-        if (hasPermissions(galleryPermissions)) {
-            mGetContent.launch("image/*");
-            Log.e("PERMISSIONS", "GRANTED");
-
-        } else {
-            /*Log.e("PERMISSIONS", "NOT_GRANTED");
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                ActivityCompat.requestPermissions(activity, galleryPermissions, ALL_GALLERY_PERMISSIONS);
-            }*/
-            requestPermissionLauncher.launch(
-                    Manifest.permission.CAMERA);
-        }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
@@ -115,59 +95,59 @@ public class GalleryOpener extends AppCompatActivity{
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mGetContent.launch("image/*");
+                    openGalleryApp();
 
-                    // Permission is granted. Continue the action or workflow
-                    // in your app.
-                } else {
+
+                }
+                // the else is commented out because it has empty body
+/*                else {
                     // Explain to the user that the feature is unavailable because
                     // the features requires a permission that the user has denied.
                     // At the same time, respect the user's decision. Don't link to
                     // system settings in an effort to convince the user to change
                     // their decision.
+                }*/
+            case ALL_CAMERA_PERMISSIONS:
+                if (grantResults.length > 0 && hasPermissions(galleryPermissions)) {
+                    pickCamera();
                 }
-                return;
+                // the else is commented out because it has empty body
+/*                else {
+
+                }*/
         }
-        // Other 'case' lines to check for other
-        // permissions this app might request.
     }
 
-
-    public void requestCameraPermission(){
-
+    public void launchGallery(){
+        requestGalleryApp();
     }
 
     public void openPhotoApp(){
         requestCameraApp();
     }
 
-    public void requestCameraApp(){
-        if (hasPermissions(camaraPermissions)) {
-            pickCamera();
+
+    private void requestGalleryApp(){
+        if (hasPermissions(galleryPermissions)) {
+            openGalleryApp();
+            Log.e("PERMISSIONS", "GRANTED");
 
         } else {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                activity.requestPermissions(camaraPermissions, ALL_CAMERA_PERMISSIONS);
-            }
+            requestPermissionGalleryLauncher.launch(galleryPermissions);
         }
     }
 
-    private boolean hasPermissions(String[] permissions) {
-        if (permissions != null) {
-            for (String permission : permissions) {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    if (activity.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-                        return false;
-                    }
-                }
-            }
-            return true;
+
+    public void requestCameraApp(){
+
+        if (hasPermissions(camaraPermissions)) {
+            pickCamera();
+            Log.e("PERMISSIONS", "GRANTED");
+
+        } else {
+            requestPermissionCameraLauncher.launch(camaraPermissions);
         }
-        return false;
     }
-
-
-
 
     public void pickCamera() {
         Log.d("OPENCAMERA", "openCamera");
@@ -181,6 +161,26 @@ public class GalleryOpener extends AppCompatActivity{
 
     }
 
+    private void openGalleryApp() {
+        mGetContent.launch("image/*");
+    }
+
+    //Check if all the the permissions are granted from a nonnull array of permissions
+    private boolean hasPermissions(String[] permissions) {
+        if (permissions != null) {
+            for (String permission : permissions) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    //if one of the permission is not granted return false
+                    if (activity.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        //If the array is null it will return false
+        return false;
+    }
 
     public void galleryOpenerListener( ImageHasbeenSelected imageHasbeenSelected){
         this.imageHasbeenSelected = imageHasbeenSelected;
