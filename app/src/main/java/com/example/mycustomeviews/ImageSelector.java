@@ -48,6 +48,7 @@ public class ImageSelector extends RelativeLayout {
                     ));
             setTextButtonColor(a.getInt(R.styleable.ImageSelector_button_text_color, DEFAULT_BUTTON_TEXT_COLOR));
 
+            setButtonText(a.getString(R.styleable.ImageSelector_button_text));
 
             a.recycle();
         }
@@ -72,7 +73,11 @@ public class ImageSelector extends RelativeLayout {
     }
 
     public void setButtonText(String text){
-
+        if(text != null){
+            selectorBtn.setText(text);
+        }else{
+            selectorBtn.setText(DEFAULT_BUTTON_TEXT);
+        }
     }
 
 
