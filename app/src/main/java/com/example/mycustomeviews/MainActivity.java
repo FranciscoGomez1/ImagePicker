@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         photoUri = Uri.parse(imagesUrls[1]);
         setContentView(R.layout.activity_main);
-       imageView = ((ImageSelector) findViewById(R.id.image_selector)).getSelectorImage();
-       Glide.with(this).load(photoUri).into(imageView);
+        imageView = ((ImageSelector) findViewById(R.id.image_selector)).getSelectorImage();
+        Glide.with(this).load(photoUri).into(imageView);
 
     }
 }

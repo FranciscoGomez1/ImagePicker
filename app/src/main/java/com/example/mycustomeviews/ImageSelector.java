@@ -2,6 +2,7 @@ package com.example.mycustomeviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.Button;
@@ -16,8 +17,10 @@ public class ImageSelector extends RelativeLayout {
     private final int DEFAULT_BUTTON_COLOR = 0xFFA4C639;
     private final int DEFAULT_BUTTON_TEXT_COLOR = 0xFFFFFFFF;
     private final String DEFAULT_BUTTON_TEXT = "Button Text";
+    private final String DEFAULT_CONTENT_DESCRIPTION = "Image of the image selector";
 
     private Button selectorBtn;
+    private ImageView selectorImg;
 
     public ImageSelector(Context context) {
         this(context,null);
@@ -50,15 +53,34 @@ public class ImageSelector extends RelativeLayout {
 
             setButtonText(a.getString(R.styleable.ImageSelector_button_text));
 
+            setSelectorImage(a.getDrawable(R.styleable.ImageSelector_image_src));
+
+            setImageContentDescription(a.getString(R.styleable.ImageSelector_image_content_description));
+
             a.recycle();
         }
     }
 
+
     private void init(){
         selectorBtn = findViewById(R.id.image_selector_btm);
+        selectorImg = findViewById(R.id.image);
         selectorBtn.setOnClickListener(view -> openGallery());
         findViewById(R.id.image).setOnClickListener(view -> takePhoto());
         galleryOpener.galleryOpenerListener(() -> ((ImageView) findViewById(R.id.image)).setImageURI(GalleryOpener.galleryUri));
+
+    }
+
+    public void setImageContentDescription(String string) {
+        if(string != null) {
+            selectorImg.setContentDescription(string);
+        }else{
+            selectorImg.setContentDescription(DEFAULT_CONTENT_DESCRIPTION);
+        }
+    }
+
+    public void setSelectorImage(Drawable drawable){
+        selectorImg.setImageDrawable(drawable);
 
     }
 
@@ -69,7 +91,6 @@ public class ImageSelector extends RelativeLayout {
 
     public void setTextButtonColor(int textColor) {
         selectorBtn.setTextColor(textColor);
-
     }
 
     public void setButtonText(String text){
@@ -79,8 +100,6 @@ public class ImageSelector extends RelativeLayout {
             selectorBtn.setText(DEFAULT_BUTTON_TEXT);
         }
     }
-
-
 
 
     private void takePhoto(){
@@ -96,10 +115,10 @@ public class ImageSelector extends RelativeLayout {
     //Return the imageView from the ImagesSelector groupViews
     //With this the Image of ImageView can programmatically
     public ImageView getSelectorImage(){
-        return findViewById(R.id.image);
+        return selectorImg;
     }
     public  void setBackground(Integer drawable){
-        ((ImageView) findViewById(R.id.image)).setImageResource(drawable);
+        selectorImg.setImageResource(drawable);
     }
 
 }
