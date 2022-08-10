@@ -20,10 +20,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        photoUri = Uri.parse(imagesUrls[1]);
         setContentView(R.layout.activity_main);
+        //The following block got commented out because now the fallowing logic can be done in a fragment
+        /*photoUri = Uri.parse(imagesUrls[1]);
         imageView = ((ImageSelector) findViewById(R.id.image_selector)).getSelectorImage();
         Glide.with(this).load(photoUri).into(imageView);
-
+        */
     }
 }

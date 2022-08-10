@@ -2,5 +2,5 @@
     <string name="app_name">MyCustomeViews</string>
     <string name="select_photo">Select Photo</string>
     <string name="image_description">view holder for the image selected by the user</string>
-    <string name="button_text">TEST BUTTON TEXT</string>
+    <string name="button_text">BUTTON TEXT</string>
 </resources>
