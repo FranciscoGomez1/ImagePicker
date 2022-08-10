@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:name="com.example.mycustomeviews.MainFrag"
+    android:id="@+id/customViewHolder"/>
+<!-- main activity layout now has a fragment (static one for now)> -->
+<!--
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:image_selector="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -18,4 +25,4 @@
 
 
 
-</RelativeLayout>
+</RelativeLayout>-->
