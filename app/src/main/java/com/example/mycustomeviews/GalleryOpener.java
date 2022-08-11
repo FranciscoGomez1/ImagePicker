@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class GalleryOpener extends AppCompatActivity{
     //need the uri
-    public static Uri galleryUri = null;
+    private Uri photoUri = null;
     private Uri cam_uri;
 
     private ComponentActivity activity;
@@ -45,7 +45,7 @@ public class GalleryOpener extends AppCompatActivity{
                     // Handle the returned Uri
                     //This is used in case the user hits the back button without selecting an image
                     if( uri != null) {
-                        galleryUri = uri;
+                        photoUri = uri;
                         //Call Listener
                         imageHasbeenSelected.imageUpdate();
                     }
@@ -57,7 +57,7 @@ public class GalleryOpener extends AppCompatActivity{
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         // There are no request codes
-                        galleryUri = cam_uri;
+                        photoUri = cam_uri;
                         imageHasbeenSelected.imageUpdate();
 
                     }
@@ -180,6 +180,10 @@ public class GalleryOpener extends AppCompatActivity{
         }
         //If the array is null it will return false
         return false;
+    }
+
+    public Uri getPhotoUri(){
+        return photoUri;
     }
 
     public void galleryOpenerListener( ImageHasbeenSelected imageHasbeenSelected){
