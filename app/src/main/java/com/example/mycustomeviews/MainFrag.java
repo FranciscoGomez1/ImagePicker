@@ -2,6 +2,7 @@ package com.example.mycustomeviews;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,8 @@ public class MainFrag extends Fragment {
         photoUri = Uri.parse(imagesUrls[1]);
         imageView = imageSelector.getSelectorImage();
         Glide.with(this).load(photoUri).into(imageView);
+
+        imageSelector.onGotPhotoUriListener(() -> Log.d("PHOTOURI_IN_FRAGMENT", imageSelector.getSelectorImageUri().toString()));
 
         return layout;
     }

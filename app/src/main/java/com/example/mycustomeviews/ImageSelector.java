@@ -3,7 +3,9 @@ package com.example.mycustomeviews;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,9 +20,11 @@ public class ImageSelector extends RelativeLayout {
     private final int DEFAULT_BUTTON_TEXT_COLOR = 0xFFFFFFFF;
     private final String DEFAULT_BUTTON_TEXT = "Button Text";
     private final String DEFAULT_CONTENT_DESCRIPTION = "Image of the image selector";
+    private OnGotPhotoUri onGotPhotoUri;
 
     private Button selectorBtn;
     private ImageView selectorImg;
+    private Uri photoUri = null;
 
     public ImageSelector(Context context) {
         this(context,null);
@@ -67,8 +71,17 @@ public class ImageSelector extends RelativeLayout {
         selectorImg = findViewById(R.id.image);
         selectorBtn.setOnClickListener(view -> openGallery());
         findViewById(R.id.image).setOnClickListener(view -> takePhoto());
-        galleryOpener.galleryOpenerListener(() -> ((ImageView) findViewById(R.id.image)).setImageURI(GalleryOpener.galleryUri));
+        galleryOpener.galleryOpenerListener(() -> setSelectorImgUri());
 
+    }
+
+    public void setSelectorImgUri(){
+        photoUri = galleryOpener.getPhotoUri();
+        if(photoUri!=null) {
+            selectorImg.setImageURI(photoUri);
+            onGotPhotoUri.onGotPhotoUri();
+            Log.d("PHOTOURI", photoUri.toString());
+        }
     }
 
     public void setImageContentDescription(String string) {
@@ -119,6 +132,18 @@ public class ImageSelector extends RelativeLayout {
     }
     public  void setBackground(Integer drawable){
         selectorImg.setImageResource(drawable);
+    }
+
+    public Uri getSelectorImageUri() {
+        return photoUri;
+    }
+
+    public void onGotPhotoUriListener(OnGotPhotoUri onGotPhotoUri){
+        this.onGotPhotoUri = onGotPhotoUri;
+    }
+
+    public interface OnGotPhotoUri{
+        void onGotPhotoUri();
     }
 
 }
