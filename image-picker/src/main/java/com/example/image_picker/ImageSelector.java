@@ -1,4 +1,4 @@
-package com.example.mycustomeviews;
+package com.example.image_picker;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import androidx.activity.ComponentActivity;
 
 public class ImageSelector extends RelativeLayout {
-    private GalleryOpener galleryOpener;
+    private ImagePicker imagePicker;
     private ComponentActivity activity;
     private final int DEFAULT_BUTTON_COLOR = 0xFFA4C639;
     private final int DEFAULT_BUTTON_TEXT_COLOR = 0xFFFFFFFF;
@@ -39,7 +39,7 @@ public class ImageSelector extends RelativeLayout {
     public ImageSelector(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.activity= (ComponentActivity) context;
-        galleryOpener = new GalleryOpener(activity);
+        imagePicker = new ImagePicker(activity);
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         layoutInflater.inflate(R.layout.image_selector, this);
 
@@ -71,12 +71,12 @@ public class ImageSelector extends RelativeLayout {
         selectorImg = findViewById(R.id.image);
         selectorBtn.setOnClickListener(view -> openGallery());
         findViewById(R.id.image).setOnClickListener(view -> takePhoto());
-        galleryOpener.galleryOpenerListener(() -> setSelectorImgUri());
+        imagePicker.galleryOpenerListener(() -> setSelectorImgUri());
 
     }
 
     public void setSelectorImgUri(){
-        photoUri = galleryOpener.getPhotoUri();
+        photoUri = imagePicker.getPhotoUri();
         if(photoUri!=null) {
             selectorImg.setImageURI(photoUri);
             onGotPhotoUri.onGotPhotoUri();
@@ -93,8 +93,10 @@ public class ImageSelector extends RelativeLayout {
     }
 
     public void setSelectorImage(Drawable drawable){
-        selectorImg.setImageDrawable(drawable);
-
+        if (drawable != null){ selectorImg.setImageDrawable(drawable);
+        } else{
+            selectorImg.setImageResource(R.drawable.ic_outline_camera_alt_24);
+        }
     }
 
     public void setButtonColor(int color){
@@ -116,12 +118,12 @@ public class ImageSelector extends RelativeLayout {
 
 
     private void takePhoto(){
-        galleryOpener.openPhotoApp();
+        imagePicker.openPhotoApp();
     }
 
     private void openGallery(){
 
-        galleryOpener.launchGallery();
+        imagePicker.launchGallery();
 
     }
 

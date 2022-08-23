@@ -12,7 +12,7 @@
     android:layout_height="match_parent">
 
 
-   <com.example.mycustomeviews.ImageSelector
+   <com.example.image_picker.ImageSelector
        android:id="@+id/image_selector"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
