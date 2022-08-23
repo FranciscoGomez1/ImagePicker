@@ -1,11 +1,13 @@
-package com.example.mycustomeviews;
+package com.example.image_picker;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.MediaStore;
+import androidx.activity.ComponentActivity;
 import android.util.Log;
 
 
@@ -15,7 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class GalleryOpener extends AppCompatActivity{
+public class ImagePicker extends AppCompatActivity {
     //need the uri
     private Uri photoUri = null;
     private Uri cam_uri;
@@ -32,7 +34,7 @@ public class GalleryOpener extends AppCompatActivity{
     private final String[] camaraPermissions;
     private final String[] galleryPermissions;
 
-    public GalleryOpener(ComponentActivity activity) {
+    public ImagePicker(ComponentActivity activity) {
         this.activity = activity;
 
         camaraPermissions = new String[]{Manifest.permission.CAMERA,
@@ -55,7 +57,7 @@ public class GalleryOpener extends AppCompatActivity{
         this.startCamera = activity.registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == RESULT_OK) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
                         // There are no request codes
                         photoUri = cam_uri;
                         imageHasbeenSelected.imageUpdate();

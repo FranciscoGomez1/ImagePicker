@@ -8,6 +8,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_above="@id/image_selector_btm"
+            android:contentDescription="view holder for the image selected by the user"
         />
 
 

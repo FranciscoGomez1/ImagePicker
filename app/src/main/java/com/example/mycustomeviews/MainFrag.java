@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.image_picker.ImageSelector;
 
 public class MainFrag extends Fragment {
     private ImageView imageView;
@@ -31,7 +32,7 @@ public class MainFrag extends Fragment {
         imageSelector = layout.findViewById(R.id.image_selector);
         photoUri = Uri.parse(imagesUrls[1]);
         imageView = imageSelector.getSelectorImage();
-        Glide.with(this).load(photoUri).into(imageView);
+       // Glide.with(this).load(photoUri).into(imageView);
 
         imageSelector.onGotPhotoUriListener(() -> Log.d("PHOTOURI_IN_FRAGMENT", imageSelector.getSelectorImageUri().toString()));
 

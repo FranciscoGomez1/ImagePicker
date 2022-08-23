@@ -4,9 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.2533197139938713" />
+        <entry key="app/src/main/res/drawable-v24/ic_outline_camera_alt_24.xml" value="0.1765" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_layout.xml" value="0.2515625" />
         <entry key="app/src/main/res/layout/image_selector.xml" value="0.1" />
+        <entry key="image-picker/src/main/res/drawable/ic_outline_camera_alt_24.xml" value="0.1765" />
+        <entry key="image-picker/src/main/res/layout/image_selector.xml" value="0.317481884057971" />
       </map>
     </option>
   </component>
