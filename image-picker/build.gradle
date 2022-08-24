@@ -42,9 +42,9 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
 
-                groupId = 'com.github.franciscogomez1'
+                groupId = 'com.github.FranciscoGomez1'
                 artifactId = 'image-picker'
-                version = '1.0.2'
+                version = '0.0.1'
             }
         }
     }
