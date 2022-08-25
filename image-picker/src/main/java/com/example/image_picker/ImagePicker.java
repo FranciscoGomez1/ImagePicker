@@ -188,7 +188,7 @@ public class ImagePicker extends AppCompatActivity {
         return photoUri;
     }
 
-    public void galleryOpenerListener( ImageHasbeenSelected imageHasbeenSelected){
+    public void ImagePickerListener(ImageHasbeenSelected imageHasbeenSelected){
         this.imageHasbeenSelected = imageHasbeenSelected;
     }
 

@@ -71,7 +71,7 @@ public class ImageSelector extends RelativeLayout {
         selectorImg = findViewById(R.id.image);
         selectorBtn.setOnClickListener(view -> openGallery());
         findViewById(R.id.image).setOnClickListener(view -> takePhoto());
-        imagePicker.galleryOpenerListener(() -> setSelectorImgUri());
+        imagePicker.ImagePickerListener(() -> setSelectorImgUri());
 
     }
 
@@ -79,8 +79,16 @@ public class ImageSelector extends RelativeLayout {
         photoUri = imagePicker.getPhotoUri();
         if(photoUri!=null) {
             selectorImg.setImageURI(photoUri);
-            onGotPhotoUri.onGotPhotoUri();
             Log.d("PHOTOURI", photoUri.toString());
+            callOnGotUri();
+        }
+    }
+
+    private void callOnGotUri() {
+        try{
+            onGotPhotoUri.onGotPhotoUri();
+        }catch(NullPointerException e){
+            Log.d("Nullpointer Exeption", e.toString());
         }
     }
 
@@ -140,6 +148,8 @@ public class ImageSelector extends RelativeLayout {
         return photoUri;
     }
 
+    //This is used to set up a callback to when the imageSelector gets the uri of the image
+    //selected. This can be used to pull the uri of the image to upload to a database.
     public void onGotPhotoUriListener(OnGotPhotoUri onGotPhotoUri){
         this.onGotPhotoUri = onGotPhotoUri;
     }

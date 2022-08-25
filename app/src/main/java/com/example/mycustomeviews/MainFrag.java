@@ -17,7 +17,7 @@ import com.example.image_picker.ImageSelector;
 
 public class MainFrag extends Fragment {
     private ImageView imageView;
-    private ImageSelector imageSelector;
+   // private ImageSelector imageSelector;
 
     private String[] imagesUrls =  new String[]{
             "https://pbs.twimg.com/profile_images/1510276954938920966/_jPqrcHD_400x400.jpg",
@@ -29,12 +29,12 @@ public class MainFrag extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_layout, container, false);
-        imageSelector = layout.findViewById(R.id.image_selector);
-        photoUri = Uri.parse(imagesUrls[1]);
-        imageView = imageSelector.getSelectorImage();
-       // Glide.with(this).load(photoUri).into(imageView);
+        // imageSelector = layout.findViewById(R.id.image_selector);
+        // photoUri = Uri.parse(imagesUrls[1]);
+        // imageView = imageSelector.getSelectorImage();
+        // Glide.with(this).load(photoUri).into(imageView);
 
-        imageSelector.onGotPhotoUriListener(() -> Log.d("PHOTOURI_IN_FRAGMENT", imageSelector.getSelectorImageUri().toString()));
+       // imageSelector.onGotPhotoUriListener(() -> Log.d("PHOTOURI_IN_FRAGMENT", imageSelector.getSelectorImageUri().toString()));
 
         return layout;
     }
