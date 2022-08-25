@@ -42,7 +42,7 @@ publishing {
         release(MavenPublication) {
             groupId = 'com.github.FranciscoGomez1'
             artifactId = 'image-picker'
-            version = '0.0.1'
+            version = '1.0.4'
 
             afterEvaluate {
                 from components.release
